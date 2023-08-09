@@ -1,1 +1,14 @@
 
+kind: ClusterClaim
+metadata:
+  name: prod-team-aks
+spec:
+  id: prodteamaks
+  compositionSelector:
+    matchLabels:
+      provider: azure-official
+      cluster: aks
+  parameters:
+    nodeSize: medium
+    minNodeCount: 1
+    version: 1.25.5
