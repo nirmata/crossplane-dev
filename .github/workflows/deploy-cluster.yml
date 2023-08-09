@@ -75,7 +75,7 @@ jobs:
 
       - name: Authenticate using kubelogin
         run: |
-            kubelogin convert-kubeconfig -l azureclix
+            kubelogin convert-kubeconfig -l azurecli
   
       - name: Deploy Cluster Claim to Dev Namespace
         env:
