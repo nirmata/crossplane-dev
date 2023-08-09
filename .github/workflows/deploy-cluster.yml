@@ -2,8 +2,9 @@ name: Deploy AKS Cluster
 
 on:
   push:
-    paths:
-      - '../../clusterclaim/azure-aks-official.yaml '
+      branches: [ "main" ]
+    # paths:
+    #   - '../../clusterclaim/azure-aks-official.yaml '
 
 jobs:
   deploy-cluster:
