@@ -20,6 +20,9 @@ jobs:
           # Install Azure CLI
           curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
+      - name: Set Azure CLI Configuration
+        run: az config set core.allow_broker=false
+
 
       # - name: Sample Azure action
       #   with: # Set Azure credentials secret as an input
