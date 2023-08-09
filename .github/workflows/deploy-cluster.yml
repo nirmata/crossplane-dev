@@ -52,19 +52,18 @@ jobs:
         run: |
           az aks get-credentials --resource-group crossplane --name crossplane
 
-
+      - name: Install kubectl
+        run: |
+              curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+              chmod +x kubectl
+              sudo mv kubectl /usr/local/bin/
   
       - name: Set Up Crossplane Context
         run: |
           CROSSPLANE_CLUSTER_NAME=crossplane  # Update with your actual Crossplane cluster name
           CROSSPLANE_NAMESPACE=dev
-          crossplane context create $CROSSPLANE_CLUSTER_NAME --namespace $CROSSPLANE_NAMESPACE
+          kubectl config set-context $CROSSPLANE_CLUSTER_NAME --namespace $CROSSPLANE_NAMESPACE
   
-      - name: Install kubectl
-        run: |
-            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-            chmod +x kubectl
-            sudo mv kubectl /usr/local/bin/
   
       - name: Deploy Cluster Claim to Dev Namespace
         run: |
