@@ -44,7 +44,7 @@ jobs:
 
       - name: Create AKS Cluster and Wait for Ready State
         env:
-          CLUSTER_CLAIM_FILE: /clusterclaim/azure-aks-official.yaml
+          CLUSTER_CLAIM_FILE: 'clusterclaim/azure-aks-official.yaml'
         run: |
           # Parse cluster claim file (modify as needed)
           CLUSTER_NAME=$(cat "$CLUSTER_CLAIM_FILE" | jq -r .clusterName)
