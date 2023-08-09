@@ -1,0 +1,79 @@
+name: Deploy AKS Cluster
+
+on:
+  push:
+    paths:
+      - '../../clusterclaim/azure-aks-official.yaml '
+
+jobs:
+  deploy-cluster:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set Up Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create AKS Cluster and Wait for Ready State
+        env:
+          CLUSTER_CLAIM_FILE: path/to/cluster_claim.yaml
+        run: |
+          # Parse cluster claim file (modify as needed)
+          CLUSTER_NAME=$(cat "$CLUSTER_CLAIM_FILE" | jq -r .clusterName)
+          REGION=$(cat "$CLUSTER_CLAIM_FILE" | jq -r .region)
+          NODE_SIZE=$(cat "$CLUSTER_CLAIM_FILE" | jq -r .nodeSize)
+
+          # Use Azure CLI to create AKS cluster
+          az aks create --resource-group my-resource-group --name $CLUSTER_NAME --node-count 3 --node-vm-size $NODE_SIZE --location $REGION
+
+          # Wait for the AKS cluster to become ready (adjust timeout as needed)
+          while [[ "$(az aks show --resource-group my-resource-group --name $CLUSTER_NAME --query provisioningState -o tsv)" != "Succeeded" ]]; do
+              echo "Waiting for the AKS cluster to become ready..."
+              sleep 10
+          done
+
+          # Get AKS credentials
+          az aks get-credentials --resource-group my-resource-group --name $CLUSTER_NAME --admin
+
+          # Read kubeconfig from the secret (modify as needed)
+          KUBECONFIG_SECRET_NAME=$(cat "$CLUSTER_CLAIM_FILE" | jq -r .kubeconfigSecretName)
+          KUBECONFIG=$(kubectl get secret $KUBECONFIG_SECRET_NAME -o jsonpath="{.data.kubeconfig}" | base64 --decode)
+
+          # Write kubeconfig to a file (modify as needed)
+          echo "$KUBECONFIG" > kubeconfig.yaml
+
+          # Print kubeconfig file content (for demonstration purposes)
+          cat kubeconfig.yaml
+
+      - name: Read and Print Kubeconfig
+        id: read-kubeconfig
+        run: |
+            # Read kubeconfig from the secret (modify as needed)
+            KUBECONFIG_SECRET_NAME=$(cat "$CLUSTER_CLAIM_FILE" | jq -r .kubeconfigSecretName)
+            KUBECONFIG=$(kubectl get secret $KUBECONFIG_SECRET_NAME -o jsonpath="{.data.kubeconfig}" | base64 --decode)
+  
+            # Print kubeconfig to the output
+            echo "::set-output name=kubeconfig::$KUBECONFIG"
+  
+            # Print kubeconfig file content (for demonstration purposes)
+            cat <<< "$KUBECONFIG"
+  
+      - name: Send Kubeconfig via Email
+        uses: dawidd6/action-send-mail@v3
+        with:
+              server_address: smtp.example.com
+              server_port: 587
+              username: ${{ secrets.EMAIL_USERNAME }}
+              password: ${{ secrets.EMAIL_PASSWORD }}
+              subject: "AKS Kubeconfig"
+              from: your@email.com
+              to: ${{ github.actor }}@usersemail.com
+              message: |
+                Here is your AKS cluster kubeconfig:
+          
+                ${{ steps.read-kubeconfig.outputs.kubeconfig }}
+          
