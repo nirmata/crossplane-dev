@@ -47,9 +47,9 @@ jobs:
           CLUSTER_CLAIM_FILE: clusterclaim/azure-aks-official.yaml
         run: |
           # Parse cluster claim file (modify as needed)
-          CLUSTER_NAME=$(cat "$CLUSTER_CLAIM_FILE" | jq -r .clusterName)
-          REGION=$(cat "$CLUSTER_CLAIM_FILE" | jq -r .region)
-          NODE_SIZE=$(cat "$CLUSTER_CLAIM_FILE" | jq -r .nodeSize)
+          # CLUSTER_NAME=$(cat "$CLUSTER_CLAIM_FILE" | jq -r .clusterName)
+          # REGION=$(cat "$CLUSTER_CLAIM_FILE" | jq -r .region)
+          # NODE_SIZE=$(cat "$CLUSTER_CLAIM_FILE" | jq -r .nodeSize)
 
           # # Use Azure CLI to create AKS cluster
           # az aks create --resource-group my-resource-group --name $CLUSTER_NAME --node-count 3 --node-vm-size $NODE_SIZE --location $REGION
