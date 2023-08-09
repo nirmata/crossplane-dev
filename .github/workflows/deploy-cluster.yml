@@ -66,9 +66,10 @@ jobs:
   
       - name: Install kubelogin
         run: |
-            wget https://github.com/Azure/kubelogin/releases/download/v0.0.17/kubelogin-linux-amd64 -O kubelogin
-            chmod +x kubelogin
-            sudo mv kubelogin /usr/local/bin/
+          wget https://github.com/Azure/kubelogin/releases/download/v0.0.31/kubelogin-linux-amd64.zip
+          unzip kubelogin-linux-amd64.zip
+          chmod +x kubelogin
+          sudo mv kubelogin /usr/local/bin/
 
 
       - name: Authenticate using kubelogin
