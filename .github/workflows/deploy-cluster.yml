@@ -66,8 +66,9 @@ jobs:
   
   
       - name: Deploy Cluster Claim to Dev Namespace
+        env:
+          CLUSTER_CLAIM_FILE: clusterclaim/azure-aks-official.yaml
         run: |
-            CLUSTER_CLAIM_FILE=$(find clusterclaim -name "*.yaml" | head -n 1)  # Update the path if needed
             kubectl apply -f "$CLUSTER_CLAIM_FILE" -n dev
   
         # - name: Wait for Cluster to Be Ready

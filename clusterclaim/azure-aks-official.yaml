@@ -10,5 +10,5 @@ spec:
       cluster: aks
   parameters:
     nodeSize: small 
-    minNodeCount: 1
+    minNodeCount: 2
     version: 1.25.5
