@@ -51,17 +51,17 @@ jobs:
           REGION=$(cat "$CLUSTER_CLAIM_FILE" | jq -r .region)
           NODE_SIZE=$(cat "$CLUSTER_CLAIM_FILE" | jq -r .nodeSize)
 
-          # Use Azure CLI to create AKS cluster
-          az aks create --resource-group my-resource-group --name $CLUSTER_NAME --node-count 3 --node-vm-size $NODE_SIZE --location $REGION
+          # # Use Azure CLI to create AKS cluster
+          # az aks create --resource-group my-resource-group --name $CLUSTER_NAME --node-count 3 --node-vm-size $NODE_SIZE --location $REGION
 
-          # Wait for the AKS cluster to become ready (adjust timeout as needed)
-          while [[ "$(az aks show --resource-group my-resource-group --name $CLUSTER_NAME --query provisioningState -o tsv)" != "Succeeded" ]]; do
-              echo "Waiting for the AKS cluster to become ready..."
-              sleep 10
-          done
+          # # Wait for the AKS cluster to become ready (adjust timeout as needed)
+          # while [[ "$(az aks show --resource-group my-resource-group --name $CLUSTER_NAME --query provisioningState -o tsv)" != "Succeeded" ]]; do
+          #     echo "Waiting for the AKS cluster to become ready..."
+          #     sleep 10
+          # done
 
-          # Get AKS credentials
-          az aks get-credentials --resource-group my-resource-group --name $CLUSTER_NAME --admin
+          # # Get AKS credentials
+          # az aks get-credentials --resource-group my-resource-group --name $CLUSTER_NAME --admin
 
           # Read kubeconfig from the secret (modify as needed)
           KUBECONFIG_SECRET_NAME=$(cat "$CLUSTER_CLAIM_FILE" | jq -r .kubeconfigSecretName)
