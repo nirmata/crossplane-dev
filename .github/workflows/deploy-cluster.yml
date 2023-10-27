@@ -63,6 +63,7 @@ jobs:
           CROSSPLANE_CLUSTER_NAME=crossplane  # Update with your actual Crossplane cluster name
           CROSSPLANE_NAMESPACE=dev
           kubectl config set-context $CROSSPLANE_CLUSTER_NAME --namespace $CROSSPLANE_NAMESPACE
+          kubectl get ns
   
       - name: Install kubelogin
         run: |
@@ -81,6 +82,7 @@ jobs:
         env:
           CLUSTER_CLAIM_FILE: clusterclaim/azure-aks-official.yaml
         run: |
+            kubectl get ns
             kubectl apply -f "$CLUSTER_CLAIM_FILE" -n dev
   
         # - name: Wait for Cluster to Be Ready
