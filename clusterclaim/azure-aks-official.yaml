@@ -9,6 +9,6 @@ spec:
       provider: azure-official
       cluster: aks
   parameters:
-    nodeSize: small 
+    nodeSize: mediums 
     minNodeCount: 1
-    version: 1.25.5
+    version: 1.25.11
